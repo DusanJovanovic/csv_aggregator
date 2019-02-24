@@ -1,5 +1,16 @@
-import pandas as pd
+from flask import Flask, request
 
-df = pd.read_csv('test_bad_format2.csv')
+app = Flask(__name__)
 
-print(df.head())
+@app.route('/')
+def home():
+    return 'Hello, Friend!'
+
+
+@app.route('/api/uploader', methods=['POST'])
+def uploader():
+    agg = request.form['aggregation']
+    print(agg)
+    data = request.files['data'].read().decode('utf-8')
+    print(len(data))
+    return ''
