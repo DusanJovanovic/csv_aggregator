@@ -60,8 +60,14 @@ def find_missing_asset_values(df):
         # Every key, value pair from dict with nan values
         # must be put to separate list
         return_list = []
-        for key, value in nan_dict.items():
-            return_list.append({key.lower(): value})
+        for key, values in nan_dict.items():
+            # TODO: This is a hack. Instead of modifying date string
+            # it should convert to Timestamp and retrieve date from it. 
+            date_list = []
+            for value in values:
+                value = value[:-2] + '20' + value[-2:]
+                date_list.append(value)
+            return_list.append({key.lower(): date_list})
         return return_list
     return nan_dict
 
