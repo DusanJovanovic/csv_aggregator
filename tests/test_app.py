@@ -72,7 +72,7 @@ class TestHome(BasicTests):
 class TestUploader(BasicTests):
 
     def test_uploader_200(self):
-        file_ = open('../data/test_data.csv', 'rb')
+        file_ = open('data/test_data.csv', 'rb')
         response = self.app.post(
             '/api/uploader',
             headers=self.headers,
@@ -82,12 +82,13 @@ class TestUploader(BasicTests):
             }
         ) 
         print(response.data)
-        # assert the status code and data of the response
-        self.assertEqual(response.data, b'17553')
+        # assert the status code and data of the 
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'2018-01-07,4151.0,4660.0,3906.0,3363.0', response.data)
     
 
     def test_bad_column_name(self):
-        file_ = open('../data/test_bad_format1.csv', 'rb')
+        file_ = open('data/test_bad_format1.csv', 'rb')
         response = self.app.post(
             '/api/uploader',
             headers=self.headers,
@@ -103,7 +104,7 @@ class TestUploader(BasicTests):
     
 
     def test_bad_date_value(self):
-        file_ = open('../data/test_bad_format2.csv', 'rb')
+        file_ = open('data/test_bad_format2.csv', 'rb')
         response = self.app.post(
             '/api/uploader',
             headers=self.headers,
@@ -119,7 +120,7 @@ class TestUploader(BasicTests):
     
 
     def test_bad_asset_value(self):
-        file_ = open('../data/test_bad_format3.csv', 'rb')
+        file_ = open('data/test_bad_format3.csv', 'rb')
         response = self.app.post(
             '/api/uploader',
             headers=self.headers,
@@ -135,7 +136,7 @@ class TestUploader(BasicTests):
     
 
     def test_no_asset_columns(self):
-        file_ = open('../data/test_bad_format4.csv', 'rb')
+        file_ = open('data/test_bad_format4.csv', 'rb')
         response = self.app.post(
             '/api/uploader',
             headers=self.headers,
@@ -151,7 +152,7 @@ class TestUploader(BasicTests):
     
 
     def test_no_asset_title(self):
-        file_ = open('../data/test_bad_format5.csv', 'rb')
+        file_ = open('data/test_bad_format5.csv', 'rb')
         response = self.app.post(
             '/api/uploader',
             headers=self.headers,
@@ -167,23 +168,7 @@ class TestUploader(BasicTests):
     
 
     def test_missing_asset_value(self):
-        file_ = open('../data/test_missing_dates.csv', 'rb')
-        response = self.app.post(
-            '/api/uploader',
-            headers=self.headers,
-            data={
-                'data': file_,
-                'aggregation': 'week',
-            }
-        ) 
-        result = json.loads(response.data)
-        # assert the status code and data of the response
-        self.assertEqual(response.status_code, 422)
-        self.assertEqual(result, response_mising_asset)
-    
-
-    def test_date_gap(self):
-        file_ = open('../data/test_missing_asset_data.csv', 'rb')
+        file_ = open('data/test_data_missing_dates.csv', 'rb')
         response = self.app.post(
             '/api/uploader',
             headers=self.headers,
@@ -196,3 +181,19 @@ class TestUploader(BasicTests):
         # assert the status code and data of the response
         self.assertEqual(response.status_code, 422)
         self.assertEqual(result, response_date_gap)
+    
+
+    def test_date_gap(self):
+        file_ = open('data/test_data_missing_asset_data.csv', 'rb')
+        response = self.app.post(
+            '/api/uploader',
+            headers=self.headers,
+            data={
+                'data': file_,
+                'aggregation': 'week',
+            }
+        ) 
+        result = json.loads(response.data)
+        # assert the status code and data of the response
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(result, response_mising_asset)
