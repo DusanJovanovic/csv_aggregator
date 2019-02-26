@@ -26,12 +26,14 @@ def check_column_names(df):
     return unnamed_list == []
 
 
-def check_asset_values(df):    
+def check_asset_values(df):
     column_names = list(df.columns.values)
+    # Check if there is any asset column
     if len(column_names) < 2:
-        return False
+        return 
+    # Check if values from asset column has the same type
     for column in column_names[1:]:
-        if str(df[column].dtype)=='object':
+        if str(df[column].dtype) == 'object':
             return False
     return True
 
@@ -51,10 +53,12 @@ def find_missing_asset_values(df):
         # iterate over column names
         for ind, elem in enumerate(column_names):
             # if value is 'nan' add temp_date to list where key is column name
-            if str(row[1][ind])=='nan':
+            if str(row[1][ind]) == 'nan':
                 nan_dict[elem] = nan_dict.get(elem, [])
                 nan_dict[elem].append(temp_date)
     if nan_dict:
+        # Every key, value pair from dict with nan values
+        # must be put to separate list
         return_list = []
         for key, value in nan_dict.items():
             return_list.append({key.lower(): value})
@@ -69,7 +73,7 @@ def check_for_missing_date(df):
         time_range = pd.period_range(min(df.Date), max(df.Date))
     except ValueError:
         return None
-    
+
     df['Date'] = pd.to_datetime(df['Date'])
     # difference between expected(time_range) and actual time range (df.Date)
     missing_dates_timestamp = time_range.to_timestamp().difference(df.Date)
@@ -93,7 +97,7 @@ def transform_csv(file_, agg_value):
     if not check_column_names(df) or not check_asset_values(df):
         return {'code': 1, 'error': 'Wrong format'}, 422
     missing_asset_values = find_missing_asset_values(df)
-    if missing_asset_values:        
+    if missing_asset_values:
         return {
             'code': 3,
             'error': 'Missing data',
@@ -112,6 +116,5 @@ def transform_csv(file_, agg_value):
                 'dates': missing_dates,
             }
         }, 422
-    
+
     return resample_df(df, aggregations[agg_value]), 200
-    
