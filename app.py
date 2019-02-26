@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, send_file
-from .transformator import transform_csv
+from utils.transformator import transform_csv
 
 app = Flask(__name__)
 
@@ -17,3 +17,7 @@ def uploader():
         transformer_data.to_csv('temp.csv', sep=',')
         return send_file('temp.csv')
     return jsonify(transformer_data), transformer_status
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)

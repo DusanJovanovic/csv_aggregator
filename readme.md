@@ -6,7 +6,6 @@ Linux
 ```
 python -m virtualenv env
 ```
-
 Windows
 ```
 python -m venv env
@@ -19,7 +18,6 @@ Linux
 ```
 source env/bin/activate
 ```
-
 Windows
 
 ```
@@ -33,12 +31,28 @@ pip install -r requirements.txt
 
 Run on Linux:
 ```
-export FLASK_APP=manage.py
+export FLASK_APP=app.py
+flask run
+```
+Run on Windows with PS:
+```
+$env:FLASK_APP = "app.py"
 flask run
 ```
 
-Run on Windows with PS:
+Run tests:
 ```
-$env:FLASK_APP = "manage.py"
-flask run
+python -m unittest discover
 ```
+
+Docker:
+Build docker image:
+```
+docker build --tag=[image_name] .
+```
+Run docker container on port 5000 (docker container expose port 5000):
+```
+docker run -p 5000:5000 [image_name]
+```
+
+App runs on localhost:5000

@@ -2,7 +2,7 @@
 
 # We simply inherit the Python 3 image. This image does
 # not particularly care what OS runs underneath
-FROM python:3
+FROM python:3.6.4-slim-jessie
 
 # Set an environment variable with the directory
 # where we'll be running the app
@@ -13,7 +13,7 @@ ENV APP /app
 RUN mkdir $APP
 WORKDIR $APP
 
-# Expose the port uWSGI will listen on
+# Expose the port
 EXPOSE 5000
 
 # Copy the requirements file in order to install

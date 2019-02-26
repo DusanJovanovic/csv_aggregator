@@ -2,3 +2,4 @@ Requirements.docx
 __pycache__/
 env/
 temp.csv
+.vscode/
