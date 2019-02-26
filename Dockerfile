@@ -26,6 +26,5 @@ RUN pip install -r requirements.txt
 # We copy the rest of the codebase into the image
 COPY . .
 
-# Finally, we run uWSGI with the ini file we
-# created earlier
+# Finally, we run app
 CMD python -u app.py
