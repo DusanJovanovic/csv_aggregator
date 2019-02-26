@@ -14,9 +14,11 @@ def uploader():
     agg = request.form['aggregation']
     data = request.files['data']
     transformer_data, transformer_status = transform_csv(data, agg)
+
     if transformer_status == 200:
         transformer_data.to_csv('temp.csv', sep=',')
         return send_file('temp.csv')
+    
     return jsonify(transformer_data), transformer_status
 
 
